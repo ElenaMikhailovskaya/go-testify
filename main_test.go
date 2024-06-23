@@ -45,5 +45,4 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	mapAnswer := strings.Split(answer, ",")
 
 	assert.Equal(t, expected, len(mapAnswer))
-
 }
