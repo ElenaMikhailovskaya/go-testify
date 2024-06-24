@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -15,7 +16,8 @@ func TestMainHandlerWhenOk(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	assert.Equal(t, responseRecorder.Code, http.StatusOK)
+	require.NotEqual(t, nil, responseRecorder.Code)
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
 }
 
 func TestMainHandlerWhenCityNotFound(t *testing.T) {
@@ -25,7 +27,8 @@ func TestMainHandlerWhenCityNotFound(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	assert.Equal(t, http.StatusBadRequest, responseRecorder.Code)
+	require.NotEqual(t, nil, responseRecorder.Code)
+	require.Equal(t, http.StatusBadRequest, responseRecorder.Code)
 
 	expected := `wrong city value`
 	assert.Equal(t, expected, responseRecorder.Body.String())
@@ -40,9 +43,12 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	handler.ServeHTTP(responseRecorder, req)
 
 	// здесь нужно добавить необходимые проверки
+	require.NotEqual(t, nil, responseRecorder.Code)
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
+
 	expected := totalCount
 	answer := responseRecorder.Body.String()
 	mapAnswer := strings.Split(answer, ",")
 
-	assert.Equal(t, expected, len(mapAnswer))
+	assert.Len(t, mapAnswer, expected)
 }
